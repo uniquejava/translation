@@ -89,15 +89,15 @@ impl Tarball {
 }
 
 ```
-这里`*mut tarball_t`指针属于`Tarball`, 而Tarball要对析构和清理工作负责, 所以我们足够了解tarball的内存生命期. 除此以外，file方法返回`borrowed slice`，　这个返回值的生命期和tarball自己的生命期(通过&self参数传递)息息相关. 这是Rust提示返回的slice只能在tarball的生命期中使用的方式. 可以防止经常在C中出现的空悬指针的问题(如果你对borrowing还不是很熟，看看[Yehuda Katz关于ownership的博客][2].
+这里`*mut tarball_t`指针属于`Tarball`, 而Tarball负责析构和清理工作, 这样我们可以足够清楚tarball的内存生命期. 除此以外，file方法返回`borrowed slice`，　这个返回值的生命期和tarball自己的生命期一致(通过&self参数传递). Rust通过这种方式提示返回的slice只能在tarball的生命期中存在. 这可以防止经常在C中出现的空悬指针的问题(如果你对borrowing还不是很熟，看看[Yehuda Katz关于ownership的博客][2].
 
-Rust绑定最主要的一面是它是一个安全的函数, 意味着使用者不必使用unsafe块来调用它! 尽管Rust有`unsafe`*实现*(因为要去调用FFI函数),但是Rust的*接口*使用了borrowing以确保在Rust代码中没有内存不安全的问题. . 归功于Rust的静态检查,从Rust中使用其它API的时候不太可能出现段错误. 不要忘了，所有的这些都是零开销: 所有在C中的原生类型在Rust中都有对等物，无需额外去分配空间也没有其它开销.
+这是个安全的函数(Rust绑定最重要的方面之一), 意味着使用者不必使用unsafe块来调用它! 尽管Rust有`unsafe`*实现*(因为要去调用FFI函数),但是Rust的*接口*使用了borrowing以确保在Rust代码中不存在内存不安全的问题. 得益于Rust的静态检查, 在从Rust中调用API的时候不太可能出现段错误(segfault). 不要忘了, 所有的这些都是零开销: 在C中的所有原生类型在Rust中都有对等物, 无需额外去分配空间也没有其它开销.
 
-牛B闪闪的Rust社区已经安全绑定了不少现有的C库了, 包括[OpenSSL], [libgit2], [libdispatch], [libcurl], [sdl2], [Unix APIs], 和 [libsodium], 这一列表在[crates.io]上正快速增长，所以你最喜爱的C库可能已经被绑或正在绑定中.
+了不起的Rust社区已经安全绑定了不少现有的C库, 包括[OpenSSL], [libgit2], [libdispatch], [libcurl], [sdl2], [Unix APIs], 和 [libsodium], 这一列表在[crates.io]上正快速增长，所以你最喜爱的C库可能已经被绑或正在绑定中.
 
 ##C调用Rust
 
-**除了内存安全,Rust既没有gc也无需运行时(runtime), 无需准备工作即可在c中直接调用rust**.这意味着零开销的FFI既适用于Rust调用C, 也适用于C调用Rust. 我们依然使用上面的例子, 但这次反过来调用. 和前面一样,所有的代码都[可以在github上找到][3]. 让我们先从Rust代码开始:
+**除了内存安全,Rust既没有gc也无需运行时(runtime), 无需准备工作即可在c中直接调用rust**.这意味着零开销的FFI既适用于Rust调用C, 也适用于C调用Rust. 我们依然使用上面的例子, 但这次反过来使用. 和前面一样,所有的代码都[可以在github上找到][3]. 让我们先从Rust代码开始:
 
 ```rust
 #[no_mangle]
@@ -160,4 +160,34 @@ FFI是Rust工具箱中众多工具的一种. 它是Rust所采纳的最关键组�
 [Python]:https://github.com/alexcrichton/rust-ffi-examples/tree/master/python-to-rust
 [Ruby]:https://github.com/alexcrichton/rust-ffi-examples/tree/master/ruby-to-rust
 [JavaScript]:https://github.com/alexcrichton/rust-ffi-examples/tree/master/node-to-rust
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
