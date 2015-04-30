@@ -50,13 +50,15 @@
 ```
 参考了这个[pull request]，　然后我自己定义了一个名叫pr的模板 **只要输入pr就能生成println!("");并且光标停在双引号中间;**保存，重启Eclipse.
 
+####8.运行
+打开Run Configuration框，设置program path，指向编译生成的目标文件名就行了，如下图所示:
+
+![RustDT Run Configurations](../images/rustdt-run-config.png)
+
 来个图.
 
 ![RustDT ScreenShot](../images/rustdt-screenshot.jpg)
 
 [pull request]: https://github.com/waynenilsen/RustDT/commit/16427af0c6f4569e9b5e0b154ad262832a080b52
-
-
-
 
 
